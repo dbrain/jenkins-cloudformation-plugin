@@ -14,6 +14,18 @@
 		<f:entry title="AWS Secret Key" field="awsSecretKey">
 			<f:textbox />
 		</f:entry>
+		<f:entry title="Proxy Host" field="proxyHost">
+			<f:textbox />
+		</f:entry>
+		<f:entry title="Proxy Port" field="proxyPort">
+			<f:textbox />
+		</f:entry>
+		<f:entry title="Proxy Username" field="proxyUsername">
+			<f:textbox />
+		</f:entry>
+		<f:entry title="Proxy Password" field="proxyPassword">
+			<f:textbox />
+		</f:entry>
 		<f:entry>
 			<f:repeatableDeleteButton />
 		</f:entry>
