@@ -38,16 +38,42 @@ public class SimpleStackBean extends AbstractDescribableImpl<SimpleStackBean> {
 	private String awsSecretKey;
 
 	/**
+	 * The proxy hostname
+	 */
+	private String proxyHost;
+
+	/**
+	 * The proxy port
+	 */
+	private String proxyPort;
+	
+	/**
+	 * The proxy username
+	 */
+	private String proxyUsername;
+
+	/**
+	 * The proxy password
+	 */
+	private String proxyPassword;
+
+	/**
 	 * The AWS Region to work against.
 	 */
 	private Region awsRegion;
 
 	@DataBoundConstructor
 	public SimpleStackBean(String stackName, String awsAccessKey,
-			String awsSecretKey, Region awsRegion) {
+			String awsSecretKey, String proxyHost, 
+			String proxyPort, String proxyUsername, String proxyPassword, 
+			Region awsRegion) {
 		this.stackName = stackName;
 		this.awsAccessKey = awsAccessKey;
 		this.awsSecretKey = awsSecretKey;
+		this.proxyHost = proxyHost;
+		this.proxyPort = proxyPort;
+		this.proxyUsername = proxyUsername;
+		this.proxyPassword = proxyPassword;
 		this.awsRegion = awsRegion != null ? awsRegion : Region.getDefault();
 	}
 
@@ -61,6 +87,22 @@ public class SimpleStackBean extends AbstractDescribableImpl<SimpleStackBean> {
 
 	public String getAwsSecretKey() {
 		return awsSecretKey;
+	}
+
+	public String getProxyHost() {
+		return proxyHost;
+	}
+
+	public String getProxyPort() {
+		return proxyPort;
+	}
+
+	public String getProxyUsername() {
+		return proxyUsername;
+	}
+
+	public String getProxyPassword() {
+		return proxyPassword;
 	}
 
 	public String getParsedAwsAccessKey(EnvVars env) {

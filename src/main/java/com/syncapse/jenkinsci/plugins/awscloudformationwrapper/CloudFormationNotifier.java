@@ -71,6 +71,10 @@ public class CloudFormationNotifier extends Notifier {
 					stack.getParsedAwsAccessKey(envVars),
 					stack.getParsedAwsSecretKey(envVars),
 					stack.getAwsRegion(),
+					stack.getProxyHost(),
+					stack.getProxyPort(),
+					stack.getProxyUsername(),
+					stack.getProxyPassword(),
 					false,
 					envVars
 			);
