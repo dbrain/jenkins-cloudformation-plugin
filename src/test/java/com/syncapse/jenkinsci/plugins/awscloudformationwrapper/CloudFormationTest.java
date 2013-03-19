@@ -38,6 +38,10 @@ public class CloudFormationTest {
 	private Map<String, String> parameters = new HashMap<String, String>();
 	private String awsAccessKey = "accessKey";
 	private String awsSecretKey = "secretKey";
+	private String proxyHost = "proxyHost";
+	private String proxyPort = "1000";
+	private String proxyUsername = "proxyUsername";
+	private String proxyPassword = "proxyPassword";
 
 	@Mock
 	private AmazonCloudFormation awsClient;
@@ -46,7 +50,7 @@ public class CloudFormationTest {
 	public void setup() throws Exception {
 
 		cf = new CloudFormation(System.out, TEST_STACK, recipeBody, parameters,
-				-12345, awsAccessKey, awsSecretKey, true, new EnvVars()) {
+				-12345, awsAccessKey, awsSecretKey, proxyHost, proxyPort, proxyUsername, proxyPassword, true, new EnvVars()) {
 			@Override
 			protected AmazonCloudFormation getAWSClient() {
 				return awsClient;

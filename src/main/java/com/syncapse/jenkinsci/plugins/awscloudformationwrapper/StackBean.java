@@ -59,6 +59,26 @@ public class StackBean extends AbstractDescribableImpl<StackBean> {
 	 */
 	private String awsSecretKey;
 
+	/**
+	 * The proxy hostname
+	 */
+	private String proxyHost;
+
+	/**
+	 * The proxy port
+	 */
+	private String proxyPort;
+	
+	/**
+	 * The proxy username
+	 */
+	private String proxyUsername;
+
+	/**
+	 * The proxy password
+	 */
+	private String proxyPassword;
+
     /**
      * Whether or not the stack should be deleted automatically when the job completes
      */
@@ -69,7 +89,9 @@ public class StackBean extends AbstractDescribableImpl<StackBean> {
 	@DataBoundConstructor
 	public StackBean(String stackName, String description,
 			String cloudFormationRecipe, String parameters, long timeout,
-			String awsAccessKey, String awsSecretKey, boolean autoDeleteStack, Region awsRegion) {
+			String awsAccessKey, String awsSecretKey, 
+			String proxyHost, String proxyPort, String proxyUsername, String proxyPassword,
+			boolean autoDeleteStack, Region awsRegion) {
 		super();
 		this.stackName = stackName;
 		this.description = description;
@@ -78,6 +100,10 @@ public class StackBean extends AbstractDescribableImpl<StackBean> {
 		this.timeout = timeout;
 		this.awsAccessKey = awsAccessKey;
 		this.awsSecretKey = awsSecretKey;
+		this.proxyHost = proxyHost;
+		this.proxyPort = proxyPort;
+		this.proxyUsername = proxyUsername;
+		this.proxyPassword = proxyPassword;
         this.autoDeleteStack = autoDeleteStack;
         this.awsRegion = awsRegion;
 	}
@@ -108,6 +134,22 @@ public class StackBean extends AbstractDescribableImpl<StackBean> {
 
 	public String getAwsSecretKey() {
 		return awsSecretKey;
+	}
+
+	public String getProxyHost() {
+		return proxyHost;
+	}
+
+	public String getProxyPort() {
+		return proxyPort;
+	}
+
+	public String getProxyUsername() {
+		return proxyUsername;
+	}
+
+	public String getProxyPassword() {
+		return proxyPassword;
 	}
 
     public boolean getAutoDeleteStack() {

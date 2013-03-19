@@ -11,6 +11,7 @@ import java.util.Map;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.cloudformation.AmazonCloudFormation;
@@ -48,6 +49,10 @@ public class CloudFormation {
 	private long timeout;
 	private String awsAccessKey;
 	private String awsSecretKey;
+	private String proxyHost;
+	private String proxyPort;
+	private String proxyUsername;
+	private String proxyPassword;
 	private PrintStream logger;
 	private AmazonCloudFormation amazonClient;
 	private Stack stack;
@@ -69,7 +74,8 @@ public class CloudFormation {
 	 */
 	public CloudFormation(PrintStream logger, String stackName,
 			String recipeBody, Map<String, String> parameters,
-			long timeout, String awsAccessKey, String awsSecretKey, Region region, 
+			long timeout, String awsAccessKey, String awsSecretKey, Region region,
+			String proxyHost, String proxyPort, String proxyUsername, String proxyPassword,
             boolean autoDeleteStack, EnvVars envVars) {
 
 		this.logger = logger;
@@ -86,6 +92,12 @@ public class CloudFormation {
 			this.timeout = timeout > MIN_TIMEOUT ? timeout : MIN_TIMEOUT;
 			this.waitBetweenAttempts = 10; // query every 10s
 		}
+
+		this.proxyHost = proxyHost;
+		this.proxyPort = proxyPort;
+		this.proxyUsername = proxyUsername;
+		this.proxyPassword = proxyPassword;
+
 		this.amazonClient = getAWSClient();
         this.autoDeleteStack = autoDeleteStack;
 		this.envVars = envVars;
@@ -93,10 +105,12 @@ public class CloudFormation {
 
 	public CloudFormation(PrintStream logger, String stackName,
 			String recipeBody, Map<String, String> parameters, long timeout,
-			String awsAccessKey, String awsSecretKey, boolean autoDeleteStack,
-			EnvVars envVars) {
+			String awsAccessKey, String awsSecretKey, 
+			String proxyHost, String proxyPort, String proxyUsername, String proxyPassword, 
+			boolean autoDeleteStack, EnvVars envVars) {
 		this(logger, stackName, recipeBody, parameters, timeout, awsAccessKey,
-				awsSecretKey, null, autoDeleteStack, envVars);
+				awsSecretKey, null, proxyHost, proxyPort, proxyUsername, proxyPassword, 
+				autoDeleteStack, envVars);
 	}
 
 	/**
@@ -180,12 +194,29 @@ public class CloudFormation {
 	}
 
 	protected AmazonCloudFormation getAWSClient() {
-		AWSCredentials credentials = new BasicAWSCredentials(this.awsAccessKey,
-				this.awsSecretKey);
-		AmazonCloudFormation amazonClient = new AmazonCloudFormationAsyncClient(
-				credentials);
+		AWSCredentials credentials = new BasicAWSCredentials(this.awsAccessKey, this.awsSecretKey);
+		AmazonCloudFormationAsyncClient amazonClient = new AmazonCloudFormationAsyncClient(credentials);
+		if (proxyHost != null && !proxyHost.isEmpty()) {
+			ClientConfiguration clientConfig = new ClientConfiguration();
+			clientConfig.setProxyHost(proxyHost);
+			clientConfig.setProxyPort(getProxyPort());
+			clientConfig.setProxyUsername(proxyUsername);
+			clientConfig.setProxyUsername(proxyPassword);
+			amazonClient.setConfiguration(clientConfig);
+		}
 		amazonClient.setEndpoint(awsRegion.endPoint);
 		return amazonClient;
+	}
+
+	private int getProxyPort() {
+		if (proxyPort != null && !proxyPort.isEmpty()) {
+			try {
+				return Integer.parseInt(proxyPort);
+			} catch (Exception e) {
+				logger.println("Invalid proxy port, should be a number.");
+			}
+		}
+		return 0;
 	}
 	
 	private boolean waitForStackToBeDeleted() {
